@@ -1,3 +1,6 @@
+*** PRIMA PARTE ***
+
+
 1.  Seleziona tutti gli ospiti che sono stati identificati con la carta di identità.
 
 SELECT *
@@ -42,3 +45,66 @@ WHERE `document_type` = 'Driver License' AND YEAR(`date_of_birth`) = '1975';
 
 SELECT SUM(`beds`)
 FROM `stanze`;
+
+
+
+*** SECONDA PARTE ***
+
+
+1) Conta gli ospiti raggruppandoli per anno di nascita
+
+SELECT COUNT(`id`), YEAR(`date_of_birth`)
+FROM `ospiti`
+GROUP BY YEAR(`date_of_birth`);
+
+2) Somma i prezzi dei pagamenti raggruppandoli per status
+
+SELECT SUM(`price`), `status`
+FROM `pagamenti`
+GROUP BY `status`;
+
+3) Conta quante volte è stata prenotata ogni stanza
+
+SELECT COUNT(`stanza_id`), `stanza_id`
+FROM `prenotazioni`
+GROUP BY `stanza_id`;
+
+4) Stampare tutti gli ospiti per ogni prenotazione
+
+SELECT `prenotazione_id`, ospiti.name, ospiti.lastname
+FROM `prenotazioni_has_ospiti`
+INNER JOIN `ospiti`
+ON ospiti.id = prenotazioni_has_ospiti.ospite_id;
+
+5) Stampare Nome, Cognome, Prezzo e Pagante per tutte le prenotazioni fatte a Maggio 2018
+
+
+
+6) Fai la somma di tutti i prezzi delle prenotazioni per le stanze del primo piano
+
+SELECT SUM(price)
+FROM `prenotazioni`
+INNER JOIN stanze
+ON prenotazioni.stanza_id = stanze.id
+INNER JOIN pagamenti
+ON prenotazioni.id = pagamenti.prenotazione_id
+WHERE floor = 1;
+
+7) Prendi i dati di fatturazione per la prenotazione con id=7
+
+SELECT `paganti`.`name`, `paganti`.`lastname`, `paganti`.`address`, `pagamenti`.`price`
+FROM `paganti`
+INNER JOIN `pagamenti`
+ON `pagamenti`.`pagante_id` = `paganti`.`id`
+INNER JOIN `prenotazioni`
+ON `prenotazioni`.`id` = `pagamenti`.`prenotazione_id`
+WHERE `prenotazioni`.`id` = 7;
+
+
+
+*** TERZA PARTE ***
+
+
+1) Fai un'analisi per vedere se ci sono ore in cui le prenotazioni sono più frequenti.
+2) Le stanze sono state tutte prenotate almeno una volta? (Visualizzare le stanze non ancora prenotate)
+3) Come si chiamano gli ospiti che hanno fatto più di due prenotazioni?
