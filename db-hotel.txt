@@ -106,5 +106,24 @@ WHERE `prenotazioni`.`id` = 7;
 
 
 1) Fai un'analisi per vedere se ci sono ore in cui le prenotazioni sono più frequenti.
+
+SELECT COUNT(prenotazioni.id), HOUR(prenotazioni.created_at)
+FROM prenotazioni
+GROUP BY HOUR(prenotazioni.created_at);
+
 2) Le stanze sono state tutte prenotate almeno una volta? (Visualizzare le stanze non ancora prenotate)
+
+SELECT `stanza_id`
+FROM `prenotazioni`
+RIGHT JOIN `stanze`
+ON stanze.id = prenotazioni.stanza_id;
+
 3) Come si chiamano gli ospiti che hanno fatto più di due prenotazioni?
+
+
+SELECT COUNT(prenotazioni_has_ospiti.ospite_id), ospiti.id, ospiti.name, ospiti.lastname
+FROM prenotazioni_has_ospiti
+INNER JOIN ospiti
+ON prenotazioni_has_ospiti.ospite_id = ospiti.id
+GROUP BY ospiti.id
+HAVING COUNT(prenotazioni_has_ospiti.ospite_id)>'2';
